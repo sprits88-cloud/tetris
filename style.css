@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #5ef0f6;
+  text-shadow: 0 0 10px rgba(94, 240, 246, 0.5);
+}
+
+.game-area {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#gameBoard {
+  border: 3px solid #0f3460;
+  background: #16213e;
+  box-shadow: 0 0 20px rgba(94, 240, 246, 0.3);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  min-width: 150px;
+}
+
+.score-panel,
+.level-panel,
+.next-panel {
+  background: #0f3460;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.score-panel h2,
+.level-panel h2,
+.next-panel h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #5ef0f6;
+}
+
+#score {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f0f000;
+}
+
+#level {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00f0a0;
+}
+
+#nextPiece {
+  border: 2px solid #16213e;
+  background: #16213e;
+  margin: 0 auto;
+  display: block;
+}
+
+#startBtn {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+#startBtn:hover {
+  background: #c23250;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(233, 69, 96, 0.4);
+}
+
+#startBtn:active {
+  transform: translateY(0);
+}
+
+.controls {
+  background: #0f3460;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.controls h3 {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  color: #5ef0f6;
+}
+
+.controls p {
+  margin: 5px 0;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+#muteBtn {
+  padding: 12px 20px;
+  font-size: 1.3rem;
+  background: #0f3460;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+#muteBtn:hover {
+  background: #16213e;
+  transform: scale(1.1);
+}
+
+#muteBtn:active {
+  transform: scale(0.95);
+}

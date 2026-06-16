@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>테트리스 게임 - 랜딩 페이지</title>
+  <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+  <div class="landing-container">
+    <header class="hero">
+      <h1>🎮 테트리스 게임</h1>
+      <p class="subtitle">클래식 테트리스를 웹 브라우저에서 즐기세요!</p>
+      <a href="game.html" class="play-btn">게임 시작하기</a>
+    </header>
+
+    <section class="features">
+      <h2>게임 특징</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎵</div>
+          <h3>레트로 BGM</h3>
+          <p>전통적인 테트리스 음악(Korobeiniki)이 게임을 더욱 즐겁게 만듭니다</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>레벨 시스템</h3>
+          <p>10줄을 클리어할 때마다 레벨이 올라가고 게임 속도가 빨라집니다</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>점수 시스템</h3>
+          <p>한 번에 많은 줄을 클리어할수록 더 높은 점수를 획득합니다</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>깔끔한 디자인</h3>
+          <p>다크 테마의 모던한 인터페이스로 눈이 편안합니다</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-to-play">
+      <h2>게임 방법</h2>
+      <div class="controls-info">
+        <div class="control-item">
+          <kbd>←</kbd>
+          <kbd>→</kbd>
+          <span>블록 좌우 이동</span>
+        </div>
+        <div class="control-item">
+          <kbd>↑</kbd>
+          <span>블록 회전</span>
+        </div>
+        <div class="control-item">
+          <kbd>↓</kbd>
+          <span>블록 빠르게 떨어뜨리기</span>
+        </div>
+        <div class="control-item">
+          <span class="btn-icon">🔊 / 🔇</span>
+          <span>음소거 토글</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="rules">
+      <h2>게임 규칙</h2>
+      <div class="rules-content">
+        <div class="rule-item">
+          <h3>📦 블록 쌓기</h3>
+          <p>떨어지는 7가지 모양의 블록을 조작하여 바닥에 쌓습니다</p>
+        </div>
+        <div class="rule-item">
+          <h3>✨ 라인 클리어</h3>
+          <p>가로줄이 완전히 채워지면 해당 줄이 사라지고 점수를 얻습니다</p>
+        </div>
+        <div class="rule-item">
+          <h3>🎮 점수 계산</h3>
+          <p>1줄: 100점 | 2줄: 300점 | 3줄: 500점 | 4줄: 800점</p>
+        </div>
+        <div class="rule-item">
+          <h3>⚡ 레벨 상승</h3>
+          <p>10줄 클리어마다 레벨 1 상승, 블록 낙하 속도가 점점 빨라집니다</p>
+        </div>
+        <div class="rule-item">
+          <h3>💥 게임 오버</h3>
+          <p>블록이 화면 맨 위까지 쌓이면 게임이 종료됩니다</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tech-info">
+      <h2>기술 스택</h2>
+      <div class="tech-tags">
+        <span class="tech-tag">HTML5 Canvas</span>
+        <span class="tech-tag">Vanilla JavaScript</span>
+        <span class="tech-tag">Web Audio API</span>
+        <span class="tech-tag">CSS3</span>
+      </div>
+      <p class="tech-description">
+        순수 JavaScript와 Web Audio API를 사용하여 외부 라이브러리 없이 구현되었습니다.
+        브라우저만 있으면 어디서든 즐길 수 있습니다.
+      </p>
+    </section>
+
+    <footer class="cta">
+      <a href="game.html" class="play-btn-large">지금 바로 플레이하기 →</a>
+    </footer>
+  </div>
+</body>
+</html>
