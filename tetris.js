@@ -82,6 +82,21 @@ const nextCtx = nextCanvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const levelElement = document.getElementById('level');
 const startBtn = document.getElementById('startBtn');
+const playerNameElement = document.getElementById('playerName');
+const leaderboardBtn = document.getElementById('leaderboardBtn');
+const myStatsBtn = document.getElementById('myStatsBtn');
+const currentUsernameElement = document.getElementById('currentUsername');
+const logoutBtn = document.getElementById('logoutBtn');
+
+// 인증 관련 요소
+const authModal = document.getElementById('authModal');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
+const authError = document.getElementById('authError');
 
 let gameBoard = [];
 let currentPiece = null;
@@ -96,8 +111,9 @@ let gameStarted = false;
 let audioContext = null;
 let isMuted = false;
 let melodyTimeouts = [];
+let currentUser = null;
 
-function init() {
+async function init() {
   gameBoard = Array(ROWS).fill().map(() => Array(COLS).fill(0));
   score = 0;
   level = 1;
@@ -118,6 +134,11 @@ function init() {
   stopMelody();
   if (!isMuted) {
     playMelody();
+  }
+
+  // API: 게임 시작
+  if (currentUser && typeof tetrisAPI !== 'undefined') {
+    await tetrisAPI.startGame();
   }
 
   startBtn.textContent = '재시작';
@@ -408,7 +429,7 @@ function rotate() {
   }
 }
 
-function lockPiece() {
+async function lockPiece() {
   for (let y = 0; y < currentPiece.shape.length; y++) {
     for (let x = 0; x < currentPiece.shape[y].length; x++) {
       if (currentPiece.shape[y][x]) {
@@ -431,6 +452,11 @@ function lockPiece() {
     gameOver = true;
     clearInterval(gameInterval);
     stopMelody();
+
+    // API: 게임 종료 및 점수 저장
+    if (typeof tetrisAPI !== 'undefined') {
+      await tetrisAPI.finishGame(score, level, totalLinesCleared);
+    }
   }
 
   draw();
@@ -488,16 +514,309 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// 인증 관련 함수
+function showAuthModal() {
+  authModal.style.display = 'flex';
+  authError.style.display = 'none';
+}
+
+function hideAuthModal() {
+  authModal.style.display = 'none';
+  authError.style.display = 'none';
+}
+
+function showError(message) {
+  authError.textContent = message;
+  authError.style.display = 'block';
+}
+
+function switchToRegister() {
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'block';
+  document.getElementById('authTitle').textContent = '회원가입';
+  authError.style.display = 'none';
+}
+
+function switchToLogin() {
+  registerForm.style.display = 'none';
+  loginForm.style.display = 'block';
+  document.getElementById('authTitle').textContent = '로그인';
+  authError.style.display = 'none';
+}
+
+function updateUserUI() {
+  if (currentUser) {
+    currentUsernameElement.textContent = currentUser.username;
+    playerNameElement.textContent = currentUser.username;
+    logoutBtn.style.display = 'inline-block';
+  } else {
+    currentUsernameElement.textContent = '로그인 필요';
+    playerNameElement.textContent = '-';
+    logoutBtn.style.display = 'none';
+  }
+}
+
+// 최고 점수 업데이트
+async function updateTopScore() {
+  if (typeof tetrisAPI === 'undefined') return;
+
+  const topScore = await tetrisAPI.getTopScore();
+  const banner = document.getElementById('topScoreBanner');
+
+  if (topScore && topScore.has_record) {
+    document.getElementById('topScoreText').textContent =
+      `최고 기록: ${topScore.username} - ${topScore.score}점 (Lv.${topScore.level})`;
+    banner.style.display = 'flex';
+  }
+}
+
+// 로그인 처리
+loginBtn.addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email || !password) {
+    showError('이메일과 비밀번호를 입력해주세요.');
+    return;
+  }
+
+  const result = await tetrisAPI.login(email, password);
+  if (result.success) {
+    currentUser = result.user;
+    updateUserUI();
+    hideAuthModal();
+    await updateTopScore();
+  } else {
+    showError(result.error);
+  }
+});
+
+// 회원가입 처리
+registerBtn.addEventListener('click', async () => {
+  const email = document.getElementById('registerEmail').value.trim();
+  const username = document.getElementById('registerUsername').value.trim();
+  const password = document.getElementById('registerPassword').value;
+
+  if (!email || !username || !password) {
+    showError('모든 필드를 입력해주세요.');
+    return;
+  }
+
+  if (password.length < 6) {
+    showError('비밀번호는 최소 6자 이상이어야 합니다.');
+    return;
+  }
+
+  const result = await tetrisAPI.register(email, username, password);
+  if (result.success) {
+    currentUser = result.user;
+    updateUserUI();
+    hideAuthModal();
+    await updateTopScore();
+  } else {
+    showError(result.error);
+  }
+});
+
+// 폼 전환
+showRegister.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchToRegister();
+});
+
+showLogin.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchToLogin();
+});
+
+// Enter 키 처리
+document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') loginBtn.click();
+});
+
+document.getElementById('registerPassword').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') registerBtn.click();
+});
+
+// 로그아웃
+logoutBtn.addEventListener('click', () => {
+  if (confirm('로그아웃 하시겠습니까?')) {
+    tetrisAPI.logout();
+  }
+});
+
+// 시작 버튼
 startBtn.addEventListener('click', () => {
+  if (!currentUser) {
+    showAuthModal();
+    return;
+  }
   init();
 });
 
+// 음소거 버튼
 const muteBtn = document.getElementById('muteBtn');
 if (muteBtn) {
   muteBtn.addEventListener('click', () => {
     toggleMute();
   });
 }
+
+// 리더보드 버튼
+if (leaderboardBtn) {
+  leaderboardBtn.addEventListener('click', async () => {
+    await showLeaderboard();
+  });
+}
+
+// 리더보드 표시
+async function showLeaderboard() {
+  const modal = document.getElementById('leaderboardModal');
+  const content = document.getElementById('leaderboardContent');
+
+  if (typeof tetrisAPI === 'undefined') {
+    content.innerHTML = '<p>API를 사용할 수 없습니다.</p>';
+    modal.style.display = 'flex';
+    return;
+  }
+
+  content.innerHTML = '<p>로딩 중...</p>';
+  modal.style.display = 'flex';
+
+  const leaderboard = await tetrisAPI.getLeaderboard(10);
+  const stats = await tetrisAPI.getStatistics();
+
+  if (leaderboard && leaderboard.length > 0) {
+    let html = '<table class="leaderboard-table"><thead><tr>';
+    html += '<th>순위</th><th>플레이어</th><th>점수</th><th>레벨</th><th>라인</th><th>날짜</th>';
+    html += '</tr></thead><tbody>';
+
+    leaderboard.forEach(entry => {
+      const rankClass = entry.rank <= 3 ? `rank-${entry.rank}` : '';
+      const date = new Date(entry.finished_at).toLocaleDateString('ko-KR');
+      html += `<tr class="${rankClass}">`;
+      html += `<td>${entry.rank}</td>`;
+      html += `<td>${entry.username}</td>`;
+      html += `<td>${entry.score}</td>`;
+      html += `<td>${entry.level}</td>`;
+      html += `<td>${entry.lines_cleared}</td>`;
+      html += `<td>${date}</td>`;
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+
+    if (stats) {
+      html += '<div style="margin-top: 20px; padding: 15px; background: #16213e; border-radius: 8px;">';
+      html += '<h3 style="color: #5ef0f6; margin-bottom: 10px;">전체 통계</h3>';
+      html += `<p>총 게임: ${stats.total_games}</p>`;
+      html += `<p>총 사용자: ${stats.total_users}</p>`;
+      html += `<p>평균 점수: ${stats.average_score}</p>`;
+      html += `<p>최고 점수: ${stats.highest_score}</p>`;
+      html += `<p>총 클리어 라인: ${stats.total_lines_cleared}</p>`;
+      html += '</div>';
+    }
+
+    content.innerHTML = html;
+  } else {
+    content.innerHTML = '<p>아직 기록이 없습니다. 첫 번째 플레이어가 되어보세요!</p>';
+  }
+}
+
+// 내 통계 표시
+async function showMyStats() {
+  if (!currentUser) {
+    alert('로그인이 필요합니다.');
+    return;
+  }
+
+  const modal = document.getElementById('statsModal');
+  const content = document.getElementById('statsContent');
+
+  content.innerHTML = '<p>로딩 중...</p>';
+  modal.style.display = 'flex';
+
+  const stats = await tetrisAPI.getUserStats();
+  const history = await tetrisAPI.getUserHistory(5);
+
+  if (stats) {
+    let html = '<div class="stat-item">';
+    html += '<span class="stat-label">총 게임 수</span>';
+    html += `<span class="stat-value">${stats.total_games}</span>`;
+    html += '</div>';
+
+    html += '<div class="stat-item">';
+    html += '<span class="stat-label">최고 점수</span>';
+    html += `<span class="stat-value">${stats.best_score}</span>`;
+    html += '</div>';
+
+    html += '<div class="stat-item">';
+    html += '<span class="stat-label">평균 점수</span>';
+    html += `<span class="stat-value">${stats.average_score}</span>`;
+    html += '</div>';
+
+    html += '<div class="stat-item">';
+    html += '<span class="stat-label">총 클리어 라인</span>';
+    html += `<span class="stat-value">${stats.total_lines_cleared}</span>`;
+    html += '</div>';
+
+    if (history && history.length > 0) {
+      html += '<div style="margin-top: 20px;">';
+      html += '<h3 style="color: #5ef0f6; margin-bottom: 10px;">최근 게임 (5개)</h3>';
+      html += '<table class="leaderboard-table"><thead><tr>';
+      html += '<th>점수</th><th>레벨</th><th>라인</th><th>날짜</th>';
+      html += '</tr></thead><tbody>';
+
+      history.forEach(record => {
+        const date = new Date(record.finished_at).toLocaleDateString('ko-KR');
+        html += '<tr>';
+        html += `<td>${record.score}</td>`;
+        html += `<td>${record.level}</td>`;
+        html += `<td>${record.lines_cleared}</td>`;
+        html += `<td>${date}</td>`;
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+    }
+
+    content.innerHTML = html;
+  } else {
+    content.innerHTML = '<p>통계를 불러올 수 없습니다.</p>';
+  }
+}
+
+// 리더보드 닫기
+function closeLeaderboard() {
+  document.getElementById('leaderboardModal').style.display = 'none';
+}
+
+// 통계 닫기
+function closeStats() {
+  document.getElementById('statsModal').style.display = 'none';
+}
+
+// 내 통계 버튼
+if (myStatsBtn) {
+  myStatsBtn.addEventListener('click', async () => {
+    await showMyStats();
+  });
+}
+
+// 페이지 로드 시 인증 확인
+window.addEventListener('load', async () => {
+  if (tetrisAPI.isAuthenticated()) {
+    currentUser = await tetrisAPI.getCurrentUser();
+    if (currentUser) {
+      updateUserUI();
+      await updateTopScore();
+    } else {
+      showAuthModal();
+    }
+  } else {
+    showAuthModal();
+  }
+});
 
 draw();
 drawNextPiece();

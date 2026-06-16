@@ -7,11 +7,77 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 로그인/회원가입 모달 -->
+  <div id="authModal" class="modal" style="display: none;">
+    <div class="modal-content auth-modal">
+      <h2 id="authTitle">로그인</h2>
+
+      <!-- 로그인 폼 -->
+      <div id="loginForm">
+        <input type="email" id="loginEmail" placeholder="이메일" required>
+        <input type="password" id="loginPassword" placeholder="비밀번호" required>
+        <button id="loginBtn" class="primary-btn">로그인</button>
+        <p class="switch-auth">
+          계정이 없으신가요? <a href="#" id="showRegister">회원가입</a>
+        </p>
+      </div>
+
+      <!-- 회원가입 폼 -->
+      <div id="registerForm" style="display: none;">
+        <input type="email" id="registerEmail" placeholder="이메일" required>
+        <input type="text" id="registerUsername" placeholder="사용자명" required>
+        <input type="password" id="registerPassword" placeholder="비밀번호 (6자 이상)" required>
+        <button id="registerBtn" class="primary-btn">회원가입</button>
+        <p class="switch-auth">
+          이미 계정이 있으신가요? <a href="#" id="showLogin">로그인</a>
+        </p>
+      </div>
+
+      <div id="authError" class="error-message" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- 리더보드 모달 -->
+  <div id="leaderboardModal" class="modal" style="display: none;">
+    <div class="modal-content leaderboard-modal">
+      <span class="close-btn" onclick="closeLeaderboard()">&times;</span>
+      <h2>🏆 리더보드</h2>
+      <div id="leaderboardContent"></div>
+    </div>
+  </div>
+
+  <!-- 사용자 통계 모달 -->
+  <div id="statsModal" class="modal" style="display: none;">
+    <div class="modal-content stats-modal">
+      <span class="close-btn" onclick="closeStats()">&times;</span>
+      <h2>📊 내 통계</h2>
+      <div id="statsContent"></div>
+    </div>
+  </div>
+
   <div class="container">
-    <h1>🎮 테트리스 게임</h1>
+    <!-- 헤더 -->
+    <div class="header">
+      <h1>🎮 테트리스 게임</h1>
+      <div class="user-info-header">
+        <span id="currentUsername">로그인 필요</span>
+        <button id="logoutBtn" style="display: none;">로그아웃</button>
+      </div>
+    </div>
+
+    <!-- 전체 최고 점수 표시 -->
+    <div class="top-score-banner" id="topScoreBanner" style="display: none;">
+      <span class="trophy-icon">👑</span>
+      <span id="topScoreText">최고 기록: - </span>
+    </div>
+
     <div class="game-area">
       <canvas id="gameBoard" width="300" height="600"></canvas>
       <div class="sidebar">
+        <div class="player-info">
+          <h3>플레이어</h3>
+          <div id="playerName">-</div>
+        </div>
         <div class="score-panel">
           <h2>점수</h2>
           <div id="score">0</div>
@@ -28,6 +94,10 @@
           <button id="startBtn">시작</button>
           <button id="muteBtn">🔊</button>
         </div>
+        <div class="button-group">
+          <button id="leaderboardBtn" class="secondary-btn">🏆 순위</button>
+          <button id="myStatsBtn" class="secondary-btn">📊 내 통계</button>
+        </div>
         <div class="controls">
           <h3>조작법</h3>
           <p>← → : 이동</p>
@@ -37,6 +107,8 @@
       </div>
     </div>
   </div>
+
+  <script src="api-client.js"></script>
   <script src="tetris.js"></script>
 </body>
 </html>

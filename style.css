@@ -16,13 +16,49 @@ body {
 
 .container {
   text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 h1 {
-  margin-bottom: 20px;
+  margin: 0;
   font-size: 2rem;
   color: #5ef0f6;
   text-shadow: 0 0 10px rgba(94, 240, 246, 0.5);
+}
+
+.user-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#currentUsername {
+  color: #f0a000;
+  font-weight: bold;
+}
+
+#logoutBtn {
+  padding: 8px 16px;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+#logoutBtn:hover {
+  background: #c23250;
 }
 
 .game-area {
@@ -150,4 +186,317 @@ h1 {
 
 #muteBtn:active {
   transform: scale(0.95);
+}
+
+/* 모달 스타일 */
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #0f3460;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  min-width: 300px;
+}
+
+.modal-content h2 {
+  color: #5ef0f6;
+  margin-bottom: 20px;
+}
+
+#playerNameInput {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid #16213e;
+  border-radius: 8px;
+  background: #16213e;
+  color: #eee;
+  margin-bottom: 20px;
+  font-family: inherit;
+}
+
+#playerNameInput:focus {
+  outline: none;
+  border-color: #5ef0f6;
+}
+
+#startGameBtn {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+#startGameBtn:hover {
+  background: #c23250;
+  transform: translateY(-2px);
+}
+
+/* 플레이어 정보 */
+.player-info {
+  background: #0f3460;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.player-info h3 {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #5ef0f6;
+}
+
+#playerName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f0a000;
+}
+
+/* 리더보드 버튼 */
+#leaderboardBtn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  background: #00f0a0;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+#leaderboardBtn:hover {
+  background: #00d890;
+  transform: translateY(-2px);
+}
+
+/* 리더보드 모달 */
+.leaderboard-modal {
+  min-width: 500px;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #5ef0f6;
+  transition: all 0.3s;
+}
+
+.close-btn:hover {
+  color: #e94560;
+  transform: scale(1.2);
+}
+
+#leaderboardContent {
+  margin-top: 20px;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.leaderboard-table th {
+  background: #16213e;
+  padding: 12px;
+  color: #5ef0f6;
+  font-size: 0.9rem;
+}
+
+.leaderboard-table td {
+  padding: 10px;
+  border-bottom: 1px solid #16213e;
+}
+
+.leaderboard-table tr:hover {
+  background: #16213e;
+}
+
+.rank-1 { color: #ffd700; font-weight: bold; }
+.rank-2 { color: #c0c0c0; font-weight: bold; }
+.rank-3 { color: #cd7f32; font-weight: bold; }
+
+/* 인증 모달 */
+.auth-modal {
+  min-width: 400px;
+}
+
+.auth-modal input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 2px solid #16213e;
+  border-radius: 8px;
+  background: #16213e;
+  color: #eee;
+  font-family: inherit;
+}
+
+.auth-modal input:focus {
+  outline: none;
+  border-color: #5ef0f6;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  margin-bottom: 15px;
+}
+
+.primary-btn:hover {
+  background: #c23250;
+  transform: translateY(-2px);
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.switch-auth a {
+  color: #5ef0f6;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.switch-auth a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  background: rgba(233, 69, 96, 0.2);
+  border: 1px solid #e94560;
+  color: #ff6b6b;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+/* 최고 점수 배너 */
+.top-score-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(102, 126, 234, 0.7);
+  }
+}
+
+.trophy-icon {
+  font-size: 2rem;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+#topScoreText {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 보조 버튼 */
+.secondary-btn {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  background: #00f0a0;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+.secondary-btn:hover {
+  background: #00d890;
+  transform: translateY(-2px);
+}
+
+/* 통계 모달 */
+.stats-modal {
+  min-width: 400px;
+}
+
+.stat-item {
+  background: #16213e;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  color: #5ef0f6;
+  font-size: 1rem;
+}
+
+.stat-value {
+  color: #f0a000;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
